@@ -5,126 +5,51 @@ public class Heap<T: Comparable> {
         case min, max
     }
     
-    private enum Child {
+    private enum Side {
         case left, right
     }
     
     public let orientation: Orientation
-    public let size: Int?
     
-    private var values: [T]
+    public private(set) var values: [T]
     
-    public init(values: [T], orientation: Orientation = .min, size: Int? = nil) {
-        // The first useful value should be at index 1.
-        var offest: [T] = []
-        if let first = values.first {
-            offest = [first]
-        }
-        
-        self.values = offest + values
+    public init(values: [T], orientation: Orientation = .min) {
+        self.values = values
         self.orientation = orientation
-        self.size = size
-        print("~~~ before heapify)")
+        
         heapify()
-        print("~~~ after heapfiy")
-    }
-    
-    public func getValues() -> [T] {
-        return Array(values[1..<values.count])
     }
     
     public func insert(_ value: T) {
-        // The first useful value should be at index 1.
-        if values.isEmpty {
-            values.append(value)
-        }
-        
         values.append(value)
         
         var index = values.count - 1
         while index > 0 {
-            if balanceWithChildren(parentIndex(of: index)) != nil {
-                index = parentIndex(of: index)
+            guard let parentIndex = parentIndex(of: index) else { break }
+            if compare(values[index], values[parentIndex]) {
+                let toSwap = values[index]
+                values[index] = values[parentIndex]
+                values[parentIndex] = toSwap
+                index = parentIndex
             } else {
                 break
-            }
-        }
-        
-        if let size = size {
-            while values.count < size {
-                values.removeLast()
             }
         }
     }
     
     public func peek() -> T? {
-        guard values.count > 1 else { return nil }
-        return values[1]
+        return values.first
     }
     
-    public func remove() -> T? {
-        guard let value = peek() else { return nil }
+    public func pop() -> T? {
+        guard let value = peek(), let last = values.last else { return nil }
         
-        if let last = values.popLast(),
-            values.count > 1 {
-            values[1] = last
-        }
+        values[0] = last
+        values.removeLast()
         
-        var index = 1
-        while index <= values.count / 2 {
-            if let swappedChild = balanceWithChildren(index) {
-                guard let childIndex = childIndex(of: index, child: swappedChild) else { break }
-                index = childIndex
-            } else {
-                break
-            }
-        }
+        bubbleDown(index: 0)
         
         return value
-    }
-    
-    private func heapify() {
-        var i = values.count / 2
-        
-        while i > 0 {
-            heapify(at: i)
-            i -= 1
-        }
-    }
-    
-    private func heapify(at index: Int) {
-        if let child = balanceWithChildren(index),
-           let childIndex = childIndex(of: index, child: child) {
-            heapify(at: childIndex)
-        }
-    }
-    
-    @discardableResult
-    private func balanceWithChildren(_ index: Int) -> Child? {
-        
-        print("~~~ balancing index: \(index)")
-        guard index > 0 else { return nil }
-        var significant = values[index]
-        var child: Child?
-        
-        if let leftValue = childValue(of: index, child: .left),
-           compare(leftValue, significant) {
-            significant = leftValue
-            child = .left
-        }
-        
-        if let rightValue = childValue(of: index, child: .right),
-           compare(rightValue, significant) {
-            significant = rightValue
-            child = .right
-        }
-        
-        if let child = child {
-            swapChild(of: index, child: child)
-            return child
-        }
-        
-        return nil
     }
     
     // For min heap, will return true if left is less than right,
@@ -138,37 +63,72 @@ public class Heap<T: Comparable> {
         }
     }
     
-    private func parentIndex(of index: Int) -> Int {
-        return index / 2
-    }
-    
-    private func childIndex(of parentIndex: Int, child: Child) -> Int? {
-        var result: Int
-        switch child {
-        case .right:
-            result = parentIndex * 2 + 1
-        case .left:
-            result = parentIndex * 2
+    private func heapify() {
+        guard var index = parentIndex(of: values.count - 1) else { return }
+        
+        while index >= 0 {
+            bubbleDown(index: index)
+            
+            index -= 1
         }
-        return result < values.count ? result : nil
     }
     
-    private func swapParent(of index: Int) {
-        let parentIndex = index / 2
-        let parentValue = values[parentIndex]
-        values[parentIndex] = values[index]
-        values[index] = parentValue
+    private func bubbleDown(index: Int) {
+        var index = index
+        
+        while index < values.count {
+            var significant = values[index]
+            var significantSide: Side?
+            
+            if let leftChildValue = childValue(of: index, on: .left),
+               compare(leftChildValue, significant) {
+                significant = leftChildValue
+                significantSide = .left
+            }
+            
+            if let rightChildValue = childValue(of: index, on: .right),
+               compare(rightChildValue, significant) {
+                significant = rightChildValue
+                significantSide = .right
+            }
+            
+            if let side = significantSide {
+                swapValue(at: index, withChild: side)
+                guard let childIndex = childIndex(of: index, on: side) else { break }
+                index = childIndex
+            } else {
+                break
+            }
+        }
     }
     
-    private func swapChild(of parentIndex: Int, child: Child) {
-        guard let childIndex = childIndex(of: parentIndex, child: child) else { return }
-        let parentValue = values[parentIndex]
-        values[parentIndex] = values[childIndex]
-        values[childIndex] = parentValue
+    private func childIndex(of index: Int, on side: Side) -> Int? {
+        var childIndex = index * 2
+        childIndex = side == .left ? childIndex + 1 : childIndex + 2
+        
+        guard childIndex < values.count else { return nil }
+        
+        return childIndex
     }
     
-    private func childValue(of parentIndex: Int, child: Child) -> T? {
-        guard let index = childIndex(of: parentIndex, child: child) else { return nil }
-        return values[index]
+    private func parentIndex(of index: Int) -> Int? {
+        guard index > 0 && index < values.count else { return nil }
+        guard index > 2 else { return 0 }
+        
+        return (index - 1) / 2
+    }
+    
+    private func childValue(of index: Int, on side: Side) -> T? {
+        guard let childIndex = childIndex(of: index, on: side) else { return nil }
+        
+        return values[childIndex]
+    }
+    
+    private func swapValue(at index: Int, withChild side: Side) {
+        guard let childIndex = childIndex(of: index, on: side) else { return }
+        
+        let value = values[index]
+        values[index] = values[childIndex]
+        values[childIndex] = value
     }
 }
