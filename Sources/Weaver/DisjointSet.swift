@@ -1,17 +1,17 @@
 import Foundation
 
-class DisjointSet {
+public class DisjointSet {
     private var roots: [Int] = []
     private var ranks: [Int] = []
     
-    init(size: Int) {
+    public init(size: Int) {
         for i in 0..<size {
             roots.append(i)
             ranks.append(1)
         }
     }
     
-    func root(of node: Int) -> Int {
+    public func root(of node: Int) -> Int {
         if node == roots[node] {
             return node
         }
@@ -21,7 +21,7 @@ class DisjointSet {
         return result
     }
     
-    func union(node1: Int, node2: Int) {
+    public func union(node1: Int, node2: Int) {
         let root1 = root(of: node1)
         let root2 = root(of: node2)
         
@@ -37,7 +37,7 @@ class DisjointSet {
         }
     }
     
-    func connected(node1: Int, node2: Int) -> Bool {
+    public func connected(node1: Int, node2: Int) -> Bool {
         return root(of: node1) == root(of: node2)
     }
 }

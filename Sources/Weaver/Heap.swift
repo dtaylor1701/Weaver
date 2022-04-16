@@ -1,7 +1,7 @@
 import Foundation
 
-class Heap<T: Comparable> {
-    enum Orientation {
+public class Heap<T: Comparable> {
+    public enum Orientation {
         case min, max
     }
     
@@ -9,12 +9,12 @@ class Heap<T: Comparable> {
         case left, right
     }
     
-    let orientation: Orientation
-    let size: Int?
+    public let orientation: Orientation
+    public let size: Int?
     
     private var values: [T]
     
-    init(values: [T], orientation: Orientation = .min, size: Int? = nil) {
+    public init(values: [T], orientation: Orientation = .min, size: Int? = nil) {
         // The first useful value should be at index 1.
         var offest: [T] = []
         if let first = values.first {
@@ -29,11 +29,11 @@ class Heap<T: Comparable> {
         print("~~~ after heapfiy")
     }
     
-    func getValues() -> [T] {
+    public func getValues() -> [T] {
         return Array(values[1..<values.count])
     }
     
-    func insert(_ value: T) {
+    public func insert(_ value: T) {
         // The first useful value should be at index 1.
         if values.isEmpty {
             values.append(value)
@@ -57,12 +57,12 @@ class Heap<T: Comparable> {
         }
     }
     
-    func peek() -> T? {
+    public func peek() -> T? {
         guard values.count > 1 else { return nil }
         return values[1]
     }
     
-    func remove() -> T? {
+    public func remove() -> T? {
         guard let value = peek() else { return nil }
         
         if let last = values.popLast(),
