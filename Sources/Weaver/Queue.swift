@@ -16,6 +16,10 @@ public class Queue<T> {
     
     public private (set) var count = 0
     
+    public var isEmpty: Bool {
+        count == 0
+    }
+    
     public init() { }
     
     public func enqueue(_ item: T) {
