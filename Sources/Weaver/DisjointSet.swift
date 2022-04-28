@@ -18,6 +18,7 @@ public class DisjointSet {
         
         let result = root(of: roots[node])
         roots[node] = result
+        
         return result
     }
     
