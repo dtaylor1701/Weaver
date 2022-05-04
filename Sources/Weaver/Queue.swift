@@ -1,7 +1,6 @@
 import Foundation
 
-public class Queue<T> {
-    
+public class Queue<T>: ExpressibleByArrayLiteral {
     class Node<T> {
         let value: T
         var next: Node?
@@ -14,21 +13,35 @@ public class Queue<T> {
     
     private var head: Node<T>?
     
+    private var tail: Node<T>?
+    
     public private (set) var count = 0
     
     public var isEmpty: Bool {
         count == 0
     }
     
-    public init() { }
+    public init(_ values: [T] = []) {
+        for value in values {
+            enqueue(value)
+        }
+    }
+    
+    required public convenience init(arrayLiteral elements: T...) {
+        self.init(elements)
+    }
     
     public func enqueue(_ item: T) {
         let newNode = Node(value: item)
         
         count += 1
+
+        tail?.next = newNode
+        tail = newNode
         
-        newNode.next = head
-        head = newNode
+        if head == nil {
+            head = tail
+        }
     }
     
     public func dequeue() -> T? {

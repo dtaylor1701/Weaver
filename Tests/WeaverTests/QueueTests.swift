@@ -30,8 +30,10 @@ class QueueTests: XCTestCase {
         XCTAssertNil(queue.dequeue())
         
         queue.enqueue(4)
+        queue.enqueue(2)
         
         XCTAssertEqual(queue.dequeue(), 4)
+        XCTAssertEqual(queue.dequeue(), 2)
     }
     
     func testIsEmpty() {
