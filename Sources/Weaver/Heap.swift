@@ -1,6 +1,6 @@
 import Foundation
 
-public class Heap<T: Comparable> {
+public struct Heap<T: Comparable> {
     public enum Orientation {
         case min, max
     }
@@ -13,6 +13,10 @@ public class Heap<T: Comparable> {
     
     public private(set) var values: [T]
     
+    public var count: Int {
+        values.count
+    }
+    
     public init(values: [T], orientation: Orientation = .min) {
         self.values = values
         self.orientation = orientation
@@ -20,7 +24,7 @@ public class Heap<T: Comparable> {
         heapify()
     }
     
-    public func insert(_ value: T) {
+    public mutating func insert(_ value: T) {
         values.append(value)
         
         var index = values.count - 1
@@ -41,7 +45,7 @@ public class Heap<T: Comparable> {
         return values.first
     }
     
-    public func pop() -> T? {
+    public mutating func pop() -> T? {
         guard let value = peek(), let last = values.last else { return nil }
         
         values[0] = last
@@ -63,7 +67,7 @@ public class Heap<T: Comparable> {
         }
     }
     
-    private func heapify() {
+    private mutating func heapify() {
         guard var index = parentIndex(of: values.count - 1) else { return }
         
         while index >= 0 {
@@ -73,7 +77,7 @@ public class Heap<T: Comparable> {
         }
     }
     
-    private func bubbleDown(index: Int) {
+    private mutating func bubbleDown(index: Int) {
         var index = index
         
         while index < values.count {
@@ -124,7 +128,7 @@ public class Heap<T: Comparable> {
         return values[childIndex]
     }
     
-    private func swapValue(at index: Int, withChild side: Side) {
+    private mutating func swapValue(at index: Int, withChild side: Side) {
         guard let childIndex = childIndex(of: index, on: side) else { return }
         
         let value = values[index]

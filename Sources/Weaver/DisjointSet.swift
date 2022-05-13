@@ -1,6 +1,6 @@
 import Foundation
 
-public class DisjointSet {
+public struct DisjointSet {
     private var roots: [Int] = []
     private var ranks: [Int] = []
     
@@ -11,7 +11,7 @@ public class DisjointSet {
         }
     }
     
-    public func root(of node: Int) -> Int {
+    public mutating func root(of node: Int) -> Int {
         if node == roots[node] {
             return node
         }
@@ -22,7 +22,7 @@ public class DisjointSet {
         return result
     }
     
-    public func union(node1: Int, node2: Int) {
+    public mutating func union(node1: Int, node2: Int) {
         let root1 = root(of: node1)
         let root2 = root(of: node2)
         
@@ -38,7 +38,7 @@ public class DisjointSet {
         }
     }
     
-    public func connected(node1: Int, node2: Int) -> Bool {
+    public mutating func connected(node1: Int, node2: Int) -> Bool {
         return root(of: node1) == root(of: node2)
     }
 }

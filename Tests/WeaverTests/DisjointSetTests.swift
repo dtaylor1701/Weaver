@@ -4,7 +4,7 @@ import XCTest
 
 class DisjointSetTests: XCTestCase {
     func testInit() throws {
-        let subject = DisjointSet(size: 4)
+        var subject = DisjointSet(size: 4)
         
         for i in 0..<4 {
             XCTAssertEqual(subject.root(of: i), i)
@@ -12,7 +12,7 @@ class DisjointSetTests: XCTestCase {
     }
     
     func testUnion() throws {
-        let subject = DisjointSet(size: 4)
+        var subject = DisjointSet(size: 4)
         
         subject.union(node1: 1, node2: 3)
         
@@ -20,7 +20,7 @@ class DisjointSetTests: XCTestCase {
     }
     
     func testConnected() throws {
-        let subject = DisjointSet(size: 4)
+        var subject = DisjointSet(size: 4)
         
         subject.union(node1: 1, node2: 3)
         
