@@ -17,6 +17,10 @@ public struct Heap<T: Comparable> {
         values.count
     }
     
+    public var isEmpty: Bool {
+        count == 0
+    }
+    
     public init(values: [T], orientation: Orientation = .min) {
         self.values = values
         self.orientation = orientation
