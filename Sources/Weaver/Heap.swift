@@ -21,7 +21,7 @@ public struct Heap<T: Comparable> {
         count == 0
     }
     
-    public init(values: [T], orientation: Orientation = .min) {
+    public init(_ values: [T], orientation: Orientation = .min) {
         self.values = values
         self.orientation = orientation
         

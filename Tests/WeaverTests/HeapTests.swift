@@ -7,7 +7,7 @@ class HeapTests: XCTestCase {
     func testInitEmpty() {
         let values: [Int] = []
         
-        var heap = Heap(values: values, orientation: .min)
+        var heap = Heap(values, orientation: .min)
         
         heap.insert(4)
         
@@ -17,7 +17,7 @@ class HeapTests: XCTestCase {
     func testInsertSmallest() {
         let values = [2,3,4,8]
         
-        var heap = Heap(values: values, orientation: .min)
+        var heap = Heap(values, orientation: .min)
         
         heap.insert(1)
         
@@ -27,7 +27,7 @@ class HeapTests: XCTestCase {
     func testInsertOther() {
         let values = [2,3,4,8]
         
-        var heap = Heap(values: values, orientation: .min)
+        var heap = Heap(values, orientation: .min)
         
         heap.insert(5)
         
@@ -37,7 +37,7 @@ class HeapTests: XCTestCase {
     func testRemoveRepeatedly() {
         let values = [3,2,1,5,6,4]
 
-        var heap = Heap(values: values, orientation: .max)
+        var heap = Heap(values, orientation: .max)
 
         XCTAssertEqual(heap.pop(), 6)
         XCTAssertEqual(heap.pop(), 5)
@@ -46,7 +46,7 @@ class HeapTests: XCTestCase {
         XCTAssertEqual(heap.pop(), 2)
         XCTAssertEqual(heap.pop(), 1)
         
-        var otherHeap = Heap(values: [3,1,2,4], orientation: .max)
+        var otherHeap = Heap([3,1,2,4], orientation: .max)
         
         XCTAssertEqual(otherHeap.pop(), 4)
         XCTAssertEqual(otherHeap.pop(), 3)
@@ -57,7 +57,7 @@ class HeapTests: XCTestCase {
     func testRemove() {
         let values = [3,2,1,7,8,4,19,16,12]
         
-        var heap = Heap(values: values, orientation: .min)
+        var heap = Heap(values, orientation: .min)
         
         XCTAssertEqual(heap.pop(), 1)
         XCTAssertEqual(heap.peek(), 2)
@@ -81,7 +81,7 @@ class HeapTests: XCTestCase {
     func testRemoveSingle() {
         let values = [1]
         
-        var heap = Heap(values: values, orientation: .min)
+        var heap = Heap(values, orientation: .min)
         
         XCTAssertEqual(heap.pop(), 1)
     }
