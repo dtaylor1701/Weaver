@@ -1,49 +1,43 @@
-//
-//  QueueTests.swift
-//  
-//
-//  Created by David Taylor on 4/27/22.
-//
-
-import XCTest
+import Testing
 import Weaver
 
-class QueueTests: XCTestCase {
+@Suite("Queue Tests")
+struct QueueTests {
 
-    func testCount() {
+    @Test func count() {
         let queue = Queue<Int>()
         
-        XCTAssertEqual(queue.count, 0)
+        #expect(queue.count == 0)
         
         queue.enqueue(2)
         
-        XCTAssertEqual(queue.count, 1)
+        #expect(queue.count == 1)
         
         _ = queue.dequeue()
         
-        XCTAssertEqual(queue.count, 0)
+        #expect(queue.count == 0)
     }
     
-    func testDequeue() {
+    @Test func dequeue() {
         let queue = Queue<Int>()
         
-        XCTAssertNil(queue.dequeue())
+        #expect(queue.dequeue() == nil)
         
         queue.enqueue(4)
         queue.enqueue(2)
         
-        XCTAssertEqual(queue.dequeue(), 4)
-        XCTAssertEqual(queue.dequeue(), 2)
+        #expect(queue.dequeue() == 4)
+        #expect(queue.dequeue() == 2)
     }
     
-    func testIsEmpty() {
+    @Test func isEmpty() {
         let queue = Queue<Int>()
         
-        XCTAssertTrue(queue.isEmpty)
+        #expect(queue.isEmpty)
         
         queue.enqueue(4)
         
-        XCTAssertFalse(queue.isEmpty)
+        #expect(!queue.isEmpty)
     }
 
 }
