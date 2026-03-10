@@ -1,33 +1,42 @@
 import Foundation
-import XCTest
+import Testing
 @testable import Weaver
 
-class DisjointSetTests: XCTestCase {
-    func testInit() throws {
+@Suite("DisjointSet Tests")
+struct DisjointSetTests {
+    @Test func testInit() throws {
         var subject = DisjointSet(size: 4)
         
         for i in 0..<4 {
-            XCTAssertEqual(subject.root(of: i), i)
+            let root = subject.root(of: i)
+            #expect(root == i)
         }
     }
     
-    func testUnion() throws {
+    @Test func testUnion() throws {
         var subject = DisjointSet(size: 4)
         
         subject.union(node1: 1, node2: 3)
         
-        XCTAssertEqual(subject.root(of: 1), subject.root(of: 3))
+        let root1 = subject.root(of: 1)
+        let root3 = subject.root(of: 3)
+        #expect(root1 == root3)
     }
     
-    func testConnected() throws {
+    @Test func testConnected() throws {
         var subject = DisjointSet(size: 4)
         
         subject.union(node1: 1, node2: 3)
         
-        XCTAssertFalse(subject.connected(node1: 1, node2: 2))
-        XCTAssertFalse(subject.connected(node1: 1, node2: 0))
-        XCTAssertFalse(subject.connected(node1: 3, node2: 2))
-        XCTAssertFalse(subject.connected(node1: 3, node2: 0))
-        XCTAssertTrue(subject.connected(node1: 1, node2: 3))
+        let c12 = subject.connected(node1: 1, node2: 2)
+        #expect(!c12)
+        let c10 = subject.connected(node1: 1, node2: 0)
+        #expect(!c10)
+        let c32 = subject.connected(node1: 3, node2: 2)
+        #expect(!c32)
+        let c30 = subject.connected(node1: 3, node2: 0)
+        #expect(!c30)
+        let c13 = subject.connected(node1: 1, node2: 3)
+        #expect(c13)
     }
 }

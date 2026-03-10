@@ -1,88 +1,88 @@
 import Foundation
-import XCTest
+import Testing
 @testable import Weaver
 
-class HeapTests: XCTestCase {
-
-    func testInitEmpty() {
+@Suite("Heap Tests")
+struct HeapTests {
+    @Test func initEmpty() {
         let values: [Int] = []
         
         var heap = Heap(values, orientation: .min)
         
         heap.insert(4)
         
-        XCTAssertEqual(heap.values, [4])
+        #expect(heap.values == [4])
     }
     
-    func testInsertSmallest() {
+    @Test func insertSmallest() {
         let values = [2,3,4,8]
         
         var heap = Heap(values, orientation: .min)
         
         heap.insert(1)
         
-        XCTAssertEqual(heap.peek(), 1)
+        #expect(heap.peek() == 1)
     }
     
-    func testInsertOther() {
+    @Test func insertOther() {
         let values = [2,3,4,8]
         
         var heap = Heap(values, orientation: .min)
         
         heap.insert(5)
         
-        XCTAssertEqual(heap.peek(), 2)
+        #expect(heap.peek() == 2)
     }
     
-    func testRemoveRepeatedly() {
+    @Test func removeRepeatedly() {
         let values = [3,2,1,5,6,4]
 
         var heap = Heap(values, orientation: .max)
 
-        XCTAssertEqual(heap.pop(), 6)
-        XCTAssertEqual(heap.pop(), 5)
-        XCTAssertEqual(heap.pop(), 4)
-        XCTAssertEqual(heap.pop(), 3)
-        XCTAssertEqual(heap.pop(), 2)
-        XCTAssertEqual(heap.pop(), 1)
+        #expect(heap.pop() == 6)
+        #expect(heap.pop() == 5)
+        #expect(heap.pop() == 4)
+        #expect(heap.pop() == 3)
+        #expect(heap.pop() == 2)
+        #expect(heap.pop() == 1)
         
         var otherHeap = Heap([3,1,2,4], orientation: .max)
         
-        XCTAssertEqual(otherHeap.pop(), 4)
-        XCTAssertEqual(otherHeap.pop(), 3)
-        XCTAssertEqual(otherHeap.pop(), 2)
-        XCTAssertEqual(otherHeap.pop(), 1)
+        #expect(otherHeap.pop() == 4)
+        #expect(otherHeap.pop() == 3)
+        #expect(otherHeap.pop() == 2)
+        #expect(otherHeap.pop() == 1)
     }
     
-    func testRemove() {
+    @Test func remove() {
         let values = [3,2,1,7,8,4,19,16,12]
         
         var heap = Heap(values, orientation: .min)
         
-        XCTAssertEqual(heap.pop(), 1)
-        XCTAssertEqual(heap.peek(), 2)
+        #expect(heap.pop() == 1)
+        #expect(heap.peek() == 2)
         
-        XCTAssertEqual(heap.pop(), 2)
-        XCTAssertEqual(heap.peek(), 3)
+        #expect(heap.pop() == 2)
+        #expect(heap.peek() == 3)
         
-        XCTAssertEqual(heap.pop(), 3)
-        XCTAssertEqual(heap.peek(), 4)
+        #expect(heap.pop() == 3)
+        #expect(heap.peek() == 4)
         
-        XCTAssertEqual(heap.pop(), 4)
-        XCTAssertEqual(heap.peek(), 7)
+        #expect(heap.pop() == 4)
+        #expect(heap.peek() == 7)
         
-        XCTAssertEqual(heap.pop(), 7)
-        XCTAssertEqual(heap.pop(), 8)
-        XCTAssertEqual(heap.pop(), 12)
-        XCTAssertEqual(heap.pop(), 16)
-        XCTAssertEqual(heap.pop(), 19)
+        #expect(heap.pop() == 7)
+        #expect(heap.pop() == 8)
+        #expect(heap.pop() == 12)
+        #expect(heap.pop() == 16)
+        #expect(heap.pop() == 19)
     }
     
-    func testRemoveSingle() {
+    @Test func removeSingle() {
         let values = [1]
         
         var heap = Heap(values, orientation: .min)
         
-        XCTAssertEqual(heap.pop(), 1)
+        #expect(heap.pop() == 1)
     }
 }

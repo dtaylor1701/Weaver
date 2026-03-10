@@ -1,7 +1,7 @@
 import Foundation
 
 public class Queue<T>: ExpressibleByArrayLiteral {
-    class Node<T> {
+    class Node {
         let value: T
         var next: Node?
         
@@ -11,11 +11,10 @@ public class Queue<T>: ExpressibleByArrayLiteral {
         }
     }
     
-    private var head: Node<T>?
+    private var head: Node?
+    private var tail: Node?
     
-    private var tail: Node<T>?
-    
-    public private (set) var count = 0
+    public private(set) var count = 0
     
     public var isEmpty: Bool {
         count == 0
@@ -36,7 +35,9 @@ public class Queue<T>: ExpressibleByArrayLiteral {
         
         count += 1
 
-        tail?.next = newNode
+        if let tailNode = tail {
+            tailNode.next = newNode
+        }
         tail = newNode
         
         if head == nil {
@@ -50,6 +51,10 @@ public class Queue<T>: ExpressibleByArrayLiteral {
         
         if result != nil {
             count -= 1
+        }
+        
+        if head == nil {
+            tail = nil
         }
         
         return result?.value
